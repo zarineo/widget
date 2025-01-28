@@ -18,7 +18,8 @@
         font-family: "Montserrat", sans-serif;
       }
       #widget {
-        margin: 0 168px;
+        margin: 0 auto;
+        width: 1180px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -27,11 +28,13 @@
         color: #ffffff;
         box-sizing: border-box;
         @media screen and (max-width: 1200px) {
-          margin: 0 50px;
+          margin: 0 auto;
+          width: 90%;
         }
         @media screen and (max-width: 760px) {
-          margin: 0 15px;
+          margin: 0 auto;
           padding: 10px;
+          width: 94%;
         }
       }
       #prayerBlock {
@@ -89,105 +92,120 @@
 
     <script>
       const city = "Grozny";
-      const apiUrl = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Russia&method=2`;
-
-      function fetchPrayerTimes() {
-        fetch(apiUrl)
+      const country = "Russia";
+      const method = 2; // Метод расчета времени намаза
+    
+      function fetchPrayerTimes(date) {
+        const apiUrl = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=${method}&date=${date}`;
+        return fetch(apiUrl)
           .then((response) => response.json())
-          .then((data) => {
-            const timings = data.data.timings;
-            const now = new Date();
-            const currentTime = now.getHours() * 60 + now.getMinutes();
-
-            // Получаем список всех намазов
-            const prayerTimes = {
-              ФАДЖР: timings.Fajr,
-              ЗУХР: timings.Dhuhr,
-              АСР: timings.Asr,
-              МАГРИБ: timings.Maghrib,
-              ИША: timings.Isha,
-            };
-
-            let nextPrayerTime = "";
-            let nextPrayerName = "";
-
-            // Ищем ближайший намаз
-            for (const [name, time] of Object.entries(prayerTimes)) {
-              const [hours, minutes] = time.split(":");
-              const prayerTimeInMinutes =
-                parseInt(hours) * 60 + parseInt(minutes);
-
-              if (prayerTimeInMinutes > currentTime) {
-                nextPrayerTime = time;
-                nextPrayerName = name;
-                break;
-              }
-            }
-
-            // Обновляем информацию о следующем намазе и таймере
-            document.getElementById(
-              "nextPrayer"
-            ).textContent = `${nextPrayerName}  ${nextPrayerTime}`;
-            startCountdown(nextPrayerTime);
-          })
+          .then((data) => data.data.timings)
           .catch((error) => {
             console.error("Ошибка при получении данных: ", error);
+            return null;
           });
       }
-
+    
+      function getNextPrayer(timingsToday, timingsTomorrow) {
+        const now = new Date();
+        const currentTime = now.getHours() * 60 + now.getMinutes();
+    
+        // Получаем список всех намазов на сегодня
+        const prayerTimesToday = {
+          ФАДЖР: timingsToday.Fajr,
+          ЗУХР: timingsToday.Dhuhr,
+          АСР: timingsToday.Asr,
+          МАГРИБ: timingsToday.Maghrib,
+          ИША: timingsToday.Isha,
+        };
+    
+        // Получаем список всех намазов на завтра (только Фаджр)
+        const prayerTimesTomorrow = {
+          ФАДЖР: timingsTomorrow.Fajr,
+        };
+    
+        let nextPrayerTime = "";
+        let nextPrayerName = "";
+    
+        // Ищем ближайший намаз на сегодня
+        for (const [name, time] of Object.entries(prayerTimesToday)) {
+          const [hours, minutes] = time.split(":");
+          const prayerTimeInMinutes = parseInt(hours) * 60 + parseInt(minutes);
+    
+          if (prayerTimeInMinutes > currentTime) {
+            nextPrayerTime = time;
+            nextPrayerName = name;
+            break;
+          }
+        }
+    
+        // Если на сегодня намазов больше нет, берем Фаджр на завтра
+        if (!nextPrayerTime) {
+          const [hours, minutes] = prayerTimesTomorrow.ФАДЖР.split(":");
+          nextPrayerTime = `${hours}:${minutes}`;
+          nextPrayerName = "ФАДЖР (завтра)";
+        }
+    
+        return { nextPrayerTime, nextPrayerName };
+      }
+    
       function startCountdown(nextPrayerTime) {
         const [nextHours, nextMinutes] = nextPrayerTime.split(":");
-        const nextTimeInSeconds =
-          parseInt(nextHours) * 3600 + parseInt(nextMinutes) * 60; // Переводим в секунды
-
+        const nextTimeInSeconds = parseInt(nextHours) * 3600 + parseInt(nextMinutes) * 60; // Переводим в секунды
+    
         setInterval(() => {
           const now = new Date();
-          const currentTimeInSeconds =
-            now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(); // Текущее время в секундах
+          const currentTimeInSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(); // Текущее время в секундах
           let timeLeft = nextTimeInSeconds - currentTimeInSeconds; // Оставшееся время в секундах
-
-          if (timeLeft > 0) {
-            const hoursLeft = Math.floor(timeLeft / 3600); // Часы
-            const minutesLeft = Math.floor((timeLeft % 3600) / 60); // Минуты
-            const secondsLeft = timeLeft % 60; // Секунды
-
-            document.getElementById("countdown").textContent = `${String(
-              hoursLeft
-            ).padStart(2, "0")}:${String(minutesLeft).padStart(
-              2,
-              "0"
-            )}:${String(secondsLeft).padStart(2, "0")}`;
-          } else {
-            document.getElementById("countdown").textContent = "Время намаза";
+    
+          if (timeLeft < 0) {
+            timeLeft += 24 * 3600; // Если время прошло, добавляем 24 часа
           }
+    
+          const hoursLeft = Math.floor(timeLeft / 3600); // Часы
+          const minutesLeft = Math.floor((timeLeft % 3600) / 60); // Минуты
+          const secondsLeft = timeLeft % 60; // Секунды
+    
+          document.getElementById("countdown").textContent = `${String(hoursLeft).padStart(2, "0")}:${String(minutesLeft).padStart(2, "0")}:${String(secondsLeft).padStart(2, "0")}`;
         }, 1000); // Обновляем каждую секунду
       }
-
+    
       function updateTime() {
         const now = new Date();
         const dateOptions = { weekday: "long" };
-        const dateOptionsDate = {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
+        const dateOptionsDate = { year: "numeric", month: "long", day: "numeric" };
         const timeOptions = { hour: "2-digit", minute: "2-digit" };
-        document.getElementById("dateBlock").textContent =
-          now.toLocaleDateString("ru-RU", dateOptions);
-        document.getElementById("dateBlockDate").textContent =
-          now.toLocaleDateString("ru-RU", dateOptionsDate);
-        document.getElementById("timeBlock").textContent =
-          now.toLocaleTimeString("ru-RU", timeOptions);
+        document.getElementById("dateBlock").textContent = now.toLocaleDateString("ru-RU", dateOptions);
+        document.getElementById("dateBlockDate").textContent = now.toLocaleDateString("ru-RU", dateOptionsDate);
+        document.getElementById("timeBlock").textContent = now.toLocaleTimeString("ru-RU", timeOptions);
       }
-
+    
+      async function fetchAndDisplayPrayerTimes() {
+        const now = new Date();
+        const today = now.toISOString().split('T')[0]; // Сегодняшняя дата в формате YYYY-MM-DD
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+        const tomorrowFormatted = tomorrow.toISOString().split('T')[0]; // Завтрашняя дата в формате YYYY-MM-DD
+    
+        // Запрашиваем данные на сегодня и завтра
+        const timingsToday = await fetchPrayerTimes(today);
+        const timingsTomorrow = await fetchPrayerTimes(tomorrowFormatted);
+    
+        if (timingsToday && timingsTomorrow) {
+          const { nextPrayerTime, nextPrayerName } = getNextPrayer(timingsToday, timingsTomorrow);
+          document.getElementById("nextPrayer").textContent = `${nextPrayerName}  ${nextPrayerTime}`;
+          startCountdown(nextPrayerTime);
+        }
+      }
+    
       // Инициализация
       setInterval(() => {
-        fetchPrayerTimes();
+        fetchAndDisplayPrayerTimes();
         updateTime();
-      }, 1000); // обновляем каждую минуту
-
-      fetchPrayerTimes(); // начальный запрос
-      updateTime(); // начальная настройка времени
+      }, 60000); // Обновляем каждую минуту
+    
+      fetchAndDisplayPrayerTimes(); // Начальный запрос
+      updateTime(); // Начальная настройка времени
     </script>
   </body>
 </html>
