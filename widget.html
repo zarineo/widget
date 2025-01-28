@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Виджет времени намаза</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body style="background-color: black;">
+    <style>
+      body {
+        font-family: "Montserrat", sans-serif;
+      }
+      #widget {
+        margin: 0 168px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: none;
+        color: #ffffff;
+        box-sizing: border-box;
+        @media screen and (max-width: 1200px) {
+          margin: 0 50px;
+        }
+        @media screen and (max-width: 760px) {
+          margin: 0 15px;
+          padding: 10px;
+        }
+      }
+      #prayerBlock {
+        text-align: center;
+      }
+
+      #dateBlockDate {
+        @media screen and (max-width: 520px) {
+          font-size: 10px;
+          text-transform: none;
+        }
+      }
+
+      .blockPlace {
+        text-align: right;
+      }
+
+      .blockOfBlock {
+        font-size: 18px;
+        text-transform: uppercase;
+        width: 33%;
+        @media screen and (max-width: 760px) {
+          font-size: 16px;
+        }
+        @media screen and (max-width: 520px) {
+          font-size: 12px;
+        }
+      }
+
+      .timer {
+        font-size: 50px;
+        font-weight: 400;
+        font-style: italic;
+        @media screen and (max-width: 760px) {
+          font-size: 20px;
+        }
+      }
+    </style>
+    <div id="widget">
+      <div class="blockOfBlock">
+        <div class="block" id="dateBlock"></div>
+        <div class="block" id="dateBlockDate"></div>
+      </div>
+
+      <div class="blockOfBlock" id="prayerBlock">
+        <div><span id="nextPrayer"></span></div>
+        <div class="timer" id="countdown"></div>
+      </div>
+
+      <div class="blockOfBlock blockPlace">
+        <div class="city" id="cityBlock">ЧР, Грозный</div>
+        <div class="block" id="timeBlock"></div>
+      </div>
+    </div>
+
+    <script>
+      const city = "Grozny";
+      const apiUrl = `http://api.aladhan.com/v1/timingsByCity?city=${city}&country=Russia&method=2`;
+
+      function fetchPrayerTimes() {
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            const timings = data.data.timings;
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+
+            // Получаем список всех намазов
+            const prayerTimes = {
+              ФАДЖР: timings.Fajr,
+              ЗУХР: timings.Dhuhr,
+              АСР: timings.Asr,
+              МАГРИБ: timings.Maghrib,
+              ИША: timings.Isha,
+            };
+
+            let nextPrayerTime = "";
+            let nextPrayerName = "";
+
+            // Ищем ближайший намаз
+            for (const [name, time] of Object.entries(prayerTimes)) {
+              const [hours, minutes] = time.split(":");
+              const prayerTimeInMinutes =
+                parseInt(hours) * 60 + parseInt(minutes);
+
+              if (prayerTimeInMinutes > currentTime) {
+                nextPrayerTime = time;
+                nextPrayerName = name;
+                break;
+              }
+            }
+
+            // Обновляем информацию о следующем намазе и таймере
+            document.getElementById(
+              "nextPrayer"
+            ).textContent = `${nextPrayerName}  ${nextPrayerTime}`;
+            startCountdown(nextPrayerTime);
+          })
+          .catch((error) => {
+            console.error("Ошибка при получении данных: ", error);
+          });
+      }
+
+      function startCountdown(nextPrayerTime) {
+        const [nextHours, nextMinutes] = nextPrayerTime.split(":");
+        const nextTimeInSeconds =
+          parseInt(nextHours) * 3600 + parseInt(nextMinutes) * 60; // Переводим в секунды
+
+        setInterval(() => {
+          const now = new Date();
+          const currentTimeInSeconds =
+            now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(); // Текущее время в секундах
+          let timeLeft = nextTimeInSeconds - currentTimeInSeconds; // Оставшееся время в секундах
+
+          if (timeLeft > 0) {
+            const hoursLeft = Math.floor(timeLeft / 3600); // Часы
+            const minutesLeft = Math.floor((timeLeft % 3600) / 60); // Минуты
+            const secondsLeft = timeLeft % 60; // Секунды
+
+            document.getElementById("countdown").textContent = `${String(
+              hoursLeft
+            ).padStart(2, "0")}:${String(minutesLeft).padStart(
+              2,
+              "0"
+            )}:${String(secondsLeft).padStart(2, "0")}`;
+          } else {
+            document.getElementById("countdown").textContent = "Время намаза";
+          }
+        }, 1000); // Обновляем каждую секунду
+      }
+
+      function updateTime() {
+        const now = new Date();
+        const dateOptions = { weekday: "long" };
+        const dateOptionsDate = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const timeOptions = { hour: "2-digit", minute: "2-digit" };
+        document.getElementById("dateBlock").textContent =
+          now.toLocaleDateString("ru-RU", dateOptions);
+        document.getElementById("dateBlockDate").textContent =
+          now.toLocaleDateString("ru-RU", dateOptionsDate);
+        document.getElementById("timeBlock").textContent =
+          now.toLocaleTimeString("ru-RU", timeOptions);
+      }
+
+      // Инициализация
+      setInterval(() => {
+        fetchPrayerTimes();
+        updateTime();
+      }, 1000); // обновляем каждую минуту
+
+      fetchPrayerTimes(); // начальный запрос
+      updateTime(); // начальная настройка времени
+    </script>
+  </body>
+</html>
