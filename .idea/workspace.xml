@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="347b2572-5bc0-4145-acd7-a1f0ed7a5eda" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;zarineo&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="08c98cb8-688d-4623-ba34-23b3d33ce7d0" />
+        <option name="url" value="https://github.com/kmva/amat_frontend.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2ag46ZU0lQC7wxZRdjou7lR68Ad" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main-page&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/xomya/Documents/js&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;DockerRegistry&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\xomya\Documents\GitHub\amat_frontend\js" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="347b2572-5bc0-4145-acd7-a1f0ed7a5eda" name="Changes" comment="" />
+      <created>1704726713220</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704726713220</updated>
+      <workItem from="1704726714350" duration="19121000" />
+      <workItem from="1704825260721" duration="9024000" />
+      <workItem from="1704997628438" duration="9305000" />
+      <workItem from="1705093722533" duration="98279000" />
+      <workItem from="1705692696695" duration="311000" />
+      <workItem from="1705851659053" duration="16326000" />
+      <workItem from="1705949668031" duration="267000" />
+      <workItem from="1705949974256" duration="7173000" />
+      <workItem from="1706008211343" duration="2868000" />
+      <workItem from="1706193859793" duration="6208000" />
+      <workItem from="1706203879647" duration="28514000" />
+      <workItem from="1706352525999" duration="156000" />
+      <workItem from="1706352843833" duration="11660000" />
+      <workItem from="1706432747897" duration="28180000" />
+      <workItem from="1706527038797" duration="7428000" />
+      <workItem from="1706619074465" duration="8077000" />
+      <workItem from="1706817649623" duration="16592000" />
+      <workItem from="1706974029017" duration="2134000" />
+      <workItem from="1706991679148" duration="8704000" />
+      <workItem from="1707108876852" duration="59000" />
+      <workItem from="1707149741621" duration="11937000" />
+      <workItem from="1707238043803" duration="8892000" />
+      <workItem from="1707249070981" duration="1504000" />
+      <workItem from="1707418712820" duration="3150000" />
+      <workItem from="1707768186790" duration="1263000" />
+      <workItem from="1707829052223" duration="619000" />
+      <workItem from="1708293300982" duration="2602000" />
+      <workItem from="1708372895716" duration="8720000" />
+      <workItem from="1708540326170" duration="9464000" />
+      <workItem from="1708622566814" duration="15109000" />
+      <workItem from="1708872710918" duration="269000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main-page" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/js/aboutus.js</url>
+          <line>94</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
